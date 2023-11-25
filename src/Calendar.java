@@ -22,7 +22,7 @@ public class Calendar extends JPanel implements ActionListener {
     public MeetingTime[] meetingTimes;
     public ArrayList<Section> sections = new ArrayList<>();
     public boolean addSection;
-    JButton addSectionButton = new JButton();
+    JButton removeAddSectionButton = new JButton();
     JLabel statusLabel = new JLabel();
 
     int colorIndex = 0;
@@ -30,6 +30,11 @@ public class Calendar extends JPanel implements ActionListener {
     public void createCalendar() {
         this.setLayout(null);
 
+        removeAddSectionButton.setSize(new Dimension(150, 75));
+        removeAddSectionButton.setLocation(App.xDimension - 170, App.yDimension - 95);
+        removeAddSectionButton.addActionListener(this);
+        removeAddSectionButton.setFocusable(false);
+        
         backButton.setSize(new Dimension(150, 75));
         backButton.setLocation(20, App.yDimension - 95);
         backButton.addActionListener(this);
@@ -61,22 +66,19 @@ public class Calendar extends JPanel implements ActionListener {
         //this.setBackground(Color.black);
         this.setFocusable(true);
         this.add(backButton);
+        this.add(removeAddSectionButton);
     }
     public Calendar(Section section) {
         sections.add(section);
-
-        addSectionButton.setSize(new Dimension(150, 75));
-        addSectionButton.setLocation(App.xDimension - 170, App.yDimension - 95);
-        addSectionButton.addActionListener(this);
-        addSectionButton.setText("Add Section");
-        addSectionButton.setFocusable(false);
-        this.add(addSectionButton);
+        removeAddSectionButton.setText("Add Section");
 
         createCalendar();
         addSection = true;
     }
     public Calendar(ArrayList<Section> sections) {
         this.sections = sections;
+        removeAddSectionButton.setText("Remove Section");
+
         createCalendar();
         addSection = false;
     }
@@ -140,39 +142,54 @@ public class Calendar extends JPanel implements ActionListener {
                 App.frame.repaint();
             }
         }
-        if (e.getSource() == addSectionButton && addSection == true) {
-            Section section = sections.get(0);
-            this.remove(statusLabel);
-            App.frame.revalidate();
-            App.frame.repaint();
-            int canAddSectionToSchedule = 2;
-            Section conflict = null;
-            for (Section s : App.schedule) {
-                if (section.index == s.index) {
-                    canAddSectionToSchedule = 1;
-                    break;
-                }
-                if (CheckSchedule.scheduleChecker(section, s) == false) {
-                    canAddSectionToSchedule = 0;
-                    conflict = s;
-                    break;
-                }
+        if (e.getSource() == removeAddSectionButton) {
+            double totalCredits = 0.0;
+            for (int i = 0; i < App.schedule.size(); i++) {
+                totalCredits += PopulateValues.subjects[App.schedule.get(i).subjectIndex].getCredits();
             }
-            if (canAddSectionToSchedule == 2) {
-                App.schedule.add(section);
-                statusLabel.setText("Section successfully added");
-                statusLabel.setBounds(App.xDimension - 350, App.yDimension - 75, 250, 15);
-            } else if (canAddSectionToSchedule == 1) {
-                statusLabel.setText("Duplicate section detected");
-                statusLabel.setBounds(App.xDimension - 350, App.yDimension - 75, 250, 15);
+            if (addSection == true) {
+                Section section = sections.get(0);
+                this.remove(statusLabel);
+                App.frame.revalidate();
+                App.frame.repaint();
+                int canAddSectionToSchedule = 3;
+                Section conflict = null;
+                for (Section s : App.schedule) {
+                    if (section.index == s.index) {
+                        canAddSectionToSchedule = 1;
+                        break;
+                    }
+                    if (CheckSchedule.scheduleChecker(section, s) == false) {
+                        canAddSectionToSchedule = 0;
+                        conflict = s;
+                        break;
+                    }
+                }
+                if (PopulateValues.subjects[section.subjectIndex].getCredits() + totalCredits > 20) {
+                    canAddSectionToSchedule = 2;
+                }
+                if (canAddSectionToSchedule == 3) {
+                    App.schedule.add(section);
+                    statusLabel.setText("Section successfully added");
+                    statusLabel.setBounds(App.xDimension - 370, App.yDimension - 75, 250, 15);
+                } else if (canAddSectionToSchedule == 2) {
+                    statusLabel.setText("You have exceeded the maximum of 20 credits");
+                    statusLabel.setBounds(App.xDimension - 520, App.yDimension - 75, 350, 15);
+                } else if (canAddSectionToSchedule == 1) {
+                    statusLabel.setText("Duplicate section detected");
+                    statusLabel.setBounds(App.xDimension - 370, App.yDimension - 75, 250, 15);
+                }
+                else {
+                    statusLabel.setText("Section conflicting with section " + conflict.index +" different time");
+                    statusLabel.setBounds(App.xDimension - 520, App.yDimension - 75, 350, 15);
+                }
+                statusLabel.setForeground(Color.black);
+                statusLabel.setFont(new Font("Arial", Font.PLAIN, 15));
+                this.add(statusLabel);
             }
             else {
-                statusLabel.setText("Section conflicting with section " + conflict.index +" different time");
-                statusLabel.setBounds(App.xDimension - 500, App.yDimension - 75, 350, 15);
-            }
-            statusLabel.setForeground(Color.black);
-            statusLabel.setFont(new Font("Arial", Font.PLAIN, 15));
-            this.add(statusLabel);
+                System.out.println("Remove Section");
+            }            
         }
     }
 }

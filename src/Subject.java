@@ -2,14 +2,16 @@ public class Subject {
     public String title;
     public String courseString;
     public Section[] sections;
+    public String credits;
     public int numOpenSections;
     public boolean openSectionCalculated = false;
 
 
-    public Subject(String title, String courseString, Section[] sections) {
+    public Subject(String title, String courseString, Section[] sections, String credits) {
         this.title = title;
         this.courseString = courseString;
         this.sections = sections;
+        this.credits = credits;
         numOpenSections = 0;
         openSectionCalculated = false;
     }
@@ -29,5 +31,11 @@ public class Subject {
         numOpenSections = openSectionsNum;
         openSectionCalculated = true;
         return numOpenSections;
+    }
+    public double getCredits() {
+        //System.out.println("Credits: " + credits);
+        if (credits == null) return 0;
+        //System.out.println(Double.parseDouble(credits));
+        return Double.parseDouble(credits);
     }
 }

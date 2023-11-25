@@ -17,6 +17,11 @@ class PopulateValues {
     private static void createSubjects(String file) {
         Gson gson = new Gson();
         subjects = gson.fromJson(file, Subject[].class);
+        for (int i = 0; i < subjects.length; i++) {
+            for (int j = 0; j < subjects[i].sections.length; j++) {
+                subjects[i].sections[j].subjectIndex = i;
+            }
+        }
     }
 
     // Reads File from filename

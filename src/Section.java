@@ -2,6 +2,7 @@ public class Section {
     public String index;
     public MeetingTime[] meetingTimes;
     public boolean openStatus;
+    public int subjectIndex;
 
     // Initializer
     public Section(String index, MeetingTime[] meetingTimes, boolean openStatus) {
