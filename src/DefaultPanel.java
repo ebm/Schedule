@@ -1,9 +1,6 @@
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -59,17 +56,6 @@ public class DefaultPanel extends JPanel implements ActionListener {
             App.frame.repaint();
         }
         if (e.getSource() == showScheduleButton) {
-            /*System.out.println("===========");
-            System.out.println("Subjects:");
-            for (Subject s : App.wishlist) {
-                System.out.println(s.title);
-            }
-            System.out.println("===========");
-            System.out.println("Sections:");
-            for (Section s : App.schedule) {
-                System.out.println(s.index);
-            }
-            System.out.println("===========");*/
             App.frame.remove(this);
             App.frame.add(new Calendar(App.schedule));
             App.frame.revalidate();

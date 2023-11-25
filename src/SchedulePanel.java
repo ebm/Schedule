@@ -13,8 +13,6 @@ import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import javafx.scene.input.MouseButton;
-
 public class SchedulePanel extends JPanel implements ActionListener{
     JButton backButton = new JButton();
     JButton searchButton = new JButton();
@@ -39,7 +37,7 @@ public class SchedulePanel extends JPanel implements ActionListener{
 
         backButton = new JButton();
         backButton.setSize(new Dimension(150, 75));
-        backButton.setLocation(0, App.yDimension - 75);
+        backButton.setLocation(20, App.yDimension - 95);
         backButton.addActionListener(this);
         backButton.setText("Back");
         backButton.setFocusable(false);
@@ -53,7 +51,7 @@ public class SchedulePanel extends JPanel implements ActionListener{
         searchButton.setText("Search");
         searchButton.setFocusable(false);
 
-        viewSectionButton.setSize(new Dimension(150, 75));
+        viewSectionButton.setSize(new Dimension(200, 75));
         viewSectionButton.setLocation(600,525);
         viewSectionButton.addActionListener(this);
         viewSectionButton.setText("View Section");

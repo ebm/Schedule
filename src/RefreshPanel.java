@@ -15,7 +15,7 @@ public class RefreshPanel extends JPanel implements ActionListener{
         this.setLayout(null);
         backButton = new JButton();
         backButton.setSize(new Dimension(150, 75));
-        backButton.setLocation(0, App.yDimension - 75);
+        backButton.setLocation(20, App.yDimension - 95);
         backButton.addActionListener(this);
         backButton.setText("Back");
         backButton.setFocusable(false);

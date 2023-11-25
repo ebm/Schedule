@@ -17,7 +17,7 @@ public class Calendar extends JPanel implements ActionListener {
     public final int unitSizeY = 36;
     public final int borderX = 115;
     public final int borderY = 90;
-    public final int shiftUp = 10;
+    public final int shiftUp = 30;
 
     public MeetingTime[] meetingTimes;
     public ArrayList<Section> sections = new ArrayList<>();
@@ -31,7 +31,7 @@ public class Calendar extends JPanel implements ActionListener {
         this.setLayout(null);
 
         backButton.setSize(new Dimension(150, 75));
-        backButton.setLocation(0, App.yDimension - 75);
+        backButton.setLocation(20, App.yDimension - 95);
         backButton.addActionListener(this);
         backButton.setText("Back");
         backButton.setFocusable(false);
@@ -41,7 +41,7 @@ public class Calendar extends JPanel implements ActionListener {
             JLabel day = new JLabel();
             day.setText(daysOfWeek[i]);
             day.setForeground(Color.black);
-            day.setBounds(40 + borderX + i * unitSizeX, 60, 150, 15);
+            day.setBounds(40 + borderX + i * unitSizeX, 70 - shiftUp, 150, 15);
             day.setFont(new Font("Arial", Font.PLAIN, 15));
             this.add(day);
         }
@@ -52,7 +52,7 @@ public class Calendar extends JPanel implements ActionListener {
             JLabel time = new JLabel();
             time.setText(times[i]);
             time.setForeground(Color.black);
-            time.setBounds(65, 75 + i * unitSizeY, 150, 15);
+            time.setBounds(65, 85 + i * unitSizeY - shiftUp, 150, 15);
             time.setFont(new Font("Arial", Font.PLAIN, 10));
             this.add(time);
         }
@@ -66,7 +66,7 @@ public class Calendar extends JPanel implements ActionListener {
         sections.add(section);
 
         addSectionButton.setSize(new Dimension(150, 75));
-        addSectionButton.setLocation(App.xDimension - 150, App.yDimension - 75);
+        addSectionButton.setLocation(App.xDimension - 170, App.yDimension - 95);
         addSectionButton.addActionListener(this);
         addSectionButton.setText("Add Section");
         addSectionButton.setFocusable(false);
@@ -112,7 +112,7 @@ public class Calendar extends JPanel implements ActionListener {
                 JLabel times = new JLabel();
                 times.setText(MeetingTime.convertTimeToString(meetingTimes[i].getStartTime()) + " -> " + MeetingTime.convertTimeToString(meetingTimes[i].getEndTime()));
                 times.setForeground(Color.white);
-                times.setBounds(xCoord + 8, (int) (yCoord - 15 + yHeight / 2), 150, 15);
+                times.setBounds(xCoord + 8, (int) (yCoord - 15 + yHeight / 2) - shiftUp + 10, 150, 15);
                 times.setFont(new Font("Arial", Font.PLAIN, 15));
                 this.add(times);
             }
