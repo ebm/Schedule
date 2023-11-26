@@ -186,7 +186,7 @@ public class Calendar extends JPanel implements ActionListener {
             }
             else {
                 boolean saveSuccessful = PopulateValues.subjectsSectionsToFile(App.schedule, App.wishlist);
-                if (saveSuccessful = true) {
+                if (saveSuccessful == true) {
                     statusLabel.setText("Saved!");
                     statusLabel.setBounds(App.xDimension - 240, App.yDimension - 75, 250, 15);
                 }
