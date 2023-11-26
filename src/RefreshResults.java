@@ -15,7 +15,7 @@ public class RefreshResults {
         urlString = link;
         filename = file;
 
-        if (writeStringToFile(readUrl()) == false) return false;
+        if (writeStringToFile(readUrl(), filename) == false) return false;
         return true;
     }
 
@@ -41,7 +41,7 @@ public class RefreshResults {
     }
     
     // Writes a string to a File
-    private static boolean writeStringToFile(String string) {
+    public static boolean writeStringToFile(String string, String filename) {
         try {
             if (string == null) return false;
             FileWriter myWriter = new FileWriter(filename);

@@ -48,7 +48,7 @@ public class RefreshPanel extends JPanel implements ActionListener{
         else {
             bar.setString("Refresh Failed.");
         }
-        PopulateValues.populate(App.filename);
+        PopulateValues.populate(App.filename, App.scheduleFile, App.wishlistFile);
     }
     @Override
     public void actionPerformed(ActionEvent e) {

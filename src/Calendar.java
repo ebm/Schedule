@@ -1,7 +1,4 @@
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -77,7 +74,7 @@ public class Calendar extends JPanel implements ActionListener {
     }
     public Calendar(ArrayList<Section> sections) {
         this.sections = sections;
-        removeAddSectionButton.setText("Remove Section");
+        removeAddSectionButton.setText("Save Data");
 
         createCalendar();
         addSection = false;
@@ -143,15 +140,15 @@ public class Calendar extends JPanel implements ActionListener {
             }
         }
         if (e.getSource() == removeAddSectionButton) {
+            this.remove(statusLabel);
+            App.frame.revalidate();
+            App.frame.repaint();
             double totalCredits = 0.0;
             for (int i = 0; i < App.schedule.size(); i++) {
                 totalCredits += PopulateValues.subjects[App.schedule.get(i).subjectIndex].getCredits();
             }
             if (addSection == true) {
                 Section section = sections.get(0);
-                this.remove(statusLabel);
-                App.frame.revalidate();
-                App.frame.repaint();
                 int canAddSectionToSchedule = 3;
                 Section conflict = null;
                 for (Section s : App.schedule) {
@@ -188,7 +185,18 @@ public class Calendar extends JPanel implements ActionListener {
                 this.add(statusLabel);
             }
             else {
-                System.out.println("Remove Section");
+                boolean saveSuccessful = PopulateValues.subjectsSectionsToFile(App.schedule, App.wishlist);
+                if (saveSuccessful = true) {
+                    statusLabel.setText("Saved!");
+                    statusLabel.setBounds(App.xDimension - 240, App.yDimension - 75, 250, 15);
+                }
+                else {
+                    statusLabel.setText("Save failed.");
+                    statusLabel.setBounds(App.xDimension - 260, App.yDimension - 75, 250, 15);
+                }
+                statusLabel.setForeground(Color.black);
+                statusLabel.setFont(new Font("Arial", Font.PLAIN, 15));
+                this.add(statusLabel);
             }            
         }
     }
