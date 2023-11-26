@@ -10,6 +10,7 @@ public class DefaultPanel extends JPanel implements ActionListener {
     JButton refreshButton = new JButton();
     JButton scheduleButton = new JButton();
     JButton showScheduleButton = new JButton();
+    JButton wishlistButton = new JButton();
 
     public final int buttonWidth = 200;
     public final int buttonHeight = 100;
@@ -34,12 +35,19 @@ public class DefaultPanel extends JPanel implements ActionListener {
         showScheduleButton.setText("Show Schedule");
         showScheduleButton.setFocusable(false);
 
+        wishlistButton.setSize(new Dimension(buttonWidth, buttonHeight));
+        wishlistButton.setLocation(App.xDimension - buttonWidth - 70, 100);
+        wishlistButton.addActionListener(this);
+        wishlistButton.setText("Show Wishlist");
+        wishlistButton.setFocusable(false);
+
         this.setPreferredSize(new Dimension(App.xDimension, App.yDimension));
         //this.setBackground(Color.black);
         this.setFocusable(true);
         this.add(refreshButton);
         this.add(scheduleButton);   
         this.add(showScheduleButton);
+        this.add(wishlistButton);
     }
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -58,6 +66,12 @@ public class DefaultPanel extends JPanel implements ActionListener {
         if (e.getSource() == showScheduleButton) {
             App.frame.remove(this);
             App.frame.add(new Calendar(App.schedule));
+            App.frame.revalidate();
+            App.frame.repaint();
+        }
+        if (e.getSource() == wishlistButton) {
+            App.frame.remove(this);
+            App.frame.add(new Wishlist());
             App.frame.revalidate();
             App.frame.repaint();
         }
