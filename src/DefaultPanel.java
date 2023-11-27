@@ -71,7 +71,7 @@ public class DefaultPanel extends JPanel implements ActionListener {
         }
         if (e.getSource() == wishlistButton) {
             App.frame.remove(this);
-            App.frame.add(new Wishlist());
+            App.frame.add(new WishlistPanel());
             App.frame.revalidate();
             App.frame.repaint();
         }

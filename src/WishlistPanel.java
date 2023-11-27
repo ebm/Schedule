@@ -11,7 +11,7 @@ import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-public class Wishlist extends JPanel implements ActionListener{
+public class WishlistPanel extends JPanel implements ActionListener{
     JButton backButton = new JButton();
     JScrollPane scrollPane;
 
@@ -25,7 +25,7 @@ public class Wishlist extends JPanel implements ActionListener{
 
     double totalCredits = 0.0;
     
-    public Wishlist() {
+    public WishlistPanel() {
         this.setLayout(null);
 
         for (int i = 0; i < App.wishlist.size(); i++) {
