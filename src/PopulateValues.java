@@ -30,7 +30,7 @@ class PopulateValues {
         Section[] schedule = gson.fromJson(scheduleString, Section[].class);
         Subject[] wishlist = gson.fromJson(wishlistString, Subject[].class);
         for (int i = 0; i < schedule.length; i++) {
-            App.schedule.add(schedule[i]);
+            App.schedule.calendar.add(schedule[i]);
         }
         for (int i = 0; i < wishlist.length; i++) {
             App.wishlist.add(wishlist[i]);

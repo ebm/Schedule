@@ -10,7 +10,7 @@ public class App {
     public static final int yDimension = 720;
 
     public static ArrayList<Subject> wishlist = new ArrayList<>();
-    public static ArrayList<Section> schedule = new ArrayList<>();
+    public static Schedule schedule = new Schedule();
 
     public static Frame frame;
     public static void main(String[] args) throws Exception {

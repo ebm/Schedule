@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -17,6 +18,7 @@ public class CalendarPanel extends JPanel implements ActionListener {
     public final int shiftUp = 30;
 
     public MeetingTime[] meetingTimes;
+    public Schedule schedule = new Schedule();
     public ArrayList<Section> sections = new ArrayList<>();
     public boolean addSection;
     JButton removeAddSectionButton = new JButton();
@@ -72,8 +74,8 @@ public class CalendarPanel extends JPanel implements ActionListener {
         createCalendar();
         addSection = true;
     }
-    public CalendarPanel(ArrayList<Section> sections) {
-        this.sections = sections;
+    public CalendarPanel(Schedule schedule) {
+        sections = schedule.calendar;
         removeAddSectionButton.setText("Save Data");
 
         createCalendar();
@@ -143,40 +145,21 @@ public class CalendarPanel extends JPanel implements ActionListener {
             this.remove(statusLabel);
             App.frame.revalidate();
             App.frame.repaint();
-            double totalCredits = 0.0;
-            for (int i = 0; i < App.schedule.size(); i++) {
-                totalCredits += PopulateValues.subjects[App.schedule.get(i).subjectIndex].getCredits();
-            }
             if (addSection == true) {
                 Section section = sections.get(0);
-                int canAddSectionToSchedule = 3;
-                Section conflict = null;
-                for (Section s : App.schedule) {
-                    if (section.index == s.index) {
-                        canAddSectionToSchedule = 1;
-                        break;
-                    }
-                    if (CheckSchedule.scheduleChecker(section, s) == false) {
-                        canAddSectionToSchedule = 0;
-                        conflict = s;
-                        break;
-                    }
-                }
-                if (PopulateValues.subjects[section.subjectIndex].getCredits() + totalCredits > 20) {
-                    canAddSectionToSchedule = 2;
-                }
-                if (canAddSectionToSchedule == 3) {
-                    App.schedule.add(section);
+                int canAddSectionToSchedule = App.schedule.addSection(section);
+                Section conflict = App.schedule.lastConflict;
+                if (canAddSectionToSchedule == 1) {
                     statusLabel.setText("Section successfully added");
                     statusLabel.setBounds(App.xDimension - 370, App.yDimension - 75, 250, 15);
-                } else if (canAddSectionToSchedule == 2) {
+                } else if (canAddSectionToSchedule == -2) {
                     statusLabel.setText("You have exceeded the maximum of 20 credits");
                     statusLabel.setBounds(App.xDimension - 520, App.yDimension - 75, 350, 15);
-                } else if (canAddSectionToSchedule == 1) {
+                } else if (canAddSectionToSchedule == 0) {
                     statusLabel.setText("Duplicate section detected");
                     statusLabel.setBounds(App.xDimension - 370, App.yDimension - 75, 250, 15);
                 }
-                else {
+                else if (canAddSectionToSchedule == -1) {
                     statusLabel.setText("Section conflicting with section " + conflict.index +" different time");
                     statusLabel.setBounds(App.xDimension - 520, App.yDimension - 75, 350, 15);
                 }
@@ -185,7 +168,7 @@ public class CalendarPanel extends JPanel implements ActionListener {
                 this.add(statusLabel);
             }
             else {
-                boolean saveSuccessful = PopulateValues.subjectsSectionsToFile(App.schedule, App.wishlist);
+                boolean saveSuccessful = PopulateValues.subjectsSectionsToFile(App.schedule.calendar, App.wishlist);
                 if (saveSuccessful == true) {
                     statusLabel.setText("Saved!");
                     statusLabel.setBounds(App.xDimension - 240, App.yDimension - 75, 250, 15);
