@@ -7,7 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class Calendar extends JPanel implements ActionListener {
+public class CalendarPanel extends JPanel implements ActionListener {
     JButton backButton = new JButton();
 
     public final int unitSizeX = 150;
@@ -65,14 +65,14 @@ public class Calendar extends JPanel implements ActionListener {
         this.add(backButton);
         this.add(removeAddSectionButton);
     }
-    public Calendar(Section section) {
+    public CalendarPanel(Section section) {
         sections.add(section);
         removeAddSectionButton.setText("Add Section");
 
         createCalendar();
         addSection = true;
     }
-    public Calendar(ArrayList<Section> sections) {
+    public CalendarPanel(ArrayList<Section> sections) {
         this.sections = sections;
         removeAddSectionButton.setText("Save Data");
 

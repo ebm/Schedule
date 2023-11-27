@@ -65,7 +65,7 @@ public class DefaultPanel extends JPanel implements ActionListener {
         }
         if (e.getSource() == showScheduleButton) {
             App.frame.remove(this);
-            App.frame.add(new Calendar(App.schedule));
+            App.frame.add(new CalendarPanel(App.schedule));
             App.frame.revalidate();
             App.frame.repaint();
         }

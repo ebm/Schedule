@@ -160,7 +160,7 @@ public class SchedulePanel extends JPanel implements ActionListener{
             //System.out.println("View Button");
             this.setVisible(false);
             Section section = PopulateValues.subjects[subjectNumber].sections[sectionNumber];
-            App.frame.add(new Calendar(section));
+            App.frame.add(new CalendarPanel(section));
         }
         if (e.getSource() == addSubjectToWishlistButton) {
             //System.out.println("Attempted to add Subject");

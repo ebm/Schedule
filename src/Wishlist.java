@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -9,7 +8,6 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -20,13 +18,19 @@ public class Wishlist extends JPanel implements ActionListener{
     JButton removeSubjectFromWishlistButton = new JButton();
     JScrollPane scrollPaneClass;
 
-    JLabel statusLabel = new JLabel();
+    JLabel totalCreditsLabel = new JLabel();
+    String subjectSelected;
 
-    int subjectNumber = 0;
-    int sectionNumber = 0;
+    JButton createScheduleButton = new JButton();
+
+    double totalCredits = 0.0;
     
     public Wishlist() {
         this.setLayout(null);
+
+        for (int i = 0; i < App.wishlist.size(); i++) {
+            totalCredits += App.wishlist.get(i).getCredits();
+        }
 
         backButton = new JButton();
         backButton.setSize(new Dimension(150, 75));
@@ -40,7 +44,6 @@ public class Wishlist extends JPanel implements ActionListener{
         removeSubjectFromWishlistButton.addActionListener(this);
         removeSubjectFromWishlistButton.setText("Remove Subject");
         removeSubjectFromWishlistButton.setFocusable(false);
-        removeSubjectFromWishlistButton.setVisible(false);
 
         this.setPreferredSize(new Dimension(1920, 1080));
         //this.setBackground(Color.black);
@@ -53,6 +56,13 @@ public class Wishlist extends JPanel implements ActionListener{
         if (scrollPaneClass != null) this.remove(scrollPaneClass);
         
         this.setLayout(null);
+
+        totalCreditsLabel.setText("Total Credits: " + totalCredits);
+        totalCreditsLabel.setForeground(Color.black);
+        totalCreditsLabel.setBounds(50, 50, 150, 15);
+        totalCreditsLabel.setFont(new Font("Arial", Font.PLAIN, 15));
+        
+        this.add(totalCreditsLabel);
         
         JList<String> list = new JList<>();
         DefaultListModel<String> model = new DefaultListModel<>();
@@ -68,13 +78,11 @@ public class Wishlist extends JPanel implements ActionListener{
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if (e.getValueIsAdjusting() == false) {
-                    subjectNumber = list.getSelectedIndex();
-                    removeSubjectFromWishlistButton.setVisible(true);
-                    System.out.println("test");
+                    subjectSelected = list.getSelectedValue();
+                    System.out.println(subjectSelected);
                 }
             }
         });
-
         App.frame.revalidate();
         App.frame.repaint();
     }
@@ -87,8 +95,19 @@ public class Wishlist extends JPanel implements ActionListener{
             App.frame.repaint();
         }
         if (e.getSource() == removeSubjectFromWishlistButton) {
-            App.wishlist.remove(PopulateValues.subjects[subjectNumber]);
+            for (int i = 0; i < App.wishlist.size(); i++) {
+                Subject s = App.wishlist.get(i);
+                if (subjectSelected != null && subjectSelected.equals(s.title)) {
+                    App.wishlist.remove(s);
+                    totalCredits -= s.getCredits();
+                }
+            }
             showData();
+        }
+        if (e.getSource() == createScheduleButton) {
+            App.frame.remove(this);
+            App.frame.revalidate();
+            App.frame.repaint();
         }
     }
 }
