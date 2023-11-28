@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -22,8 +24,12 @@ public class CalendarPanel extends JPanel implements ActionListener {
     public boolean addSection;
     JButton removeAddSectionButton = new JButton();
     JLabel statusLabel = new JLabel();
+    JButton saveDataButton = new JButton();
 
     int colorIndex = 0;
+    ArrayList<ArrayList<Rectangle>> rectArr = new ArrayList<>();
+    Section sectionClicked = null;
+    ArrayList<JLabel> timesArr = new ArrayList<>();
 
     public void createCalendar() {
         this.setLayout(null);
@@ -32,6 +38,12 @@ public class CalendarPanel extends JPanel implements ActionListener {
         removeAddSectionButton.setLocation(App.xDimension - 170, App.yDimension - 95);
         removeAddSectionButton.addActionListener(this);
         removeAddSectionButton.setFocusable(false);
+
+        saveDataButton.setSize(new Dimension(150, 75));
+        saveDataButton.setLocation(App.xDimension / 2, App.yDimension - 95);
+        saveDataButton.addActionListener(this);
+        saveDataButton.setText("Save Data");
+        saveDataButton.setFocusable(false);
         
         backButton.setSize(new Dimension(150, 75));
         backButton.setLocation(20, App.yDimension - 95);
@@ -65,6 +77,31 @@ public class CalendarPanel extends JPanel implements ActionListener {
         this.setFocusable(true);
         this.add(backButton);
         this.add(removeAddSectionButton);
+        this.add(saveDataButton);
+
+        class MouseClick implements MouseListener {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                //System.out.println(rectArr.size());
+                for (int i = 0; i < rectArr.size(); i++) {
+                    for (int j = 0; j < rectArr.get(i).size(); j++) {
+                        if (rectArr.get(i).get(j).contains(e.getPoint())) {
+                            sectionClicked = sections.get(i);
+                            //System.out.println(sectionClicked.index);
+                        }
+                    }
+                }
+            }
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+            @Override
+            public void mouseExited(MouseEvent e) {}
+            @Override
+            public void mousePressed(MouseEvent e) {}
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+        }
+        this.addMouseListener(new MouseClick());
     }
     public CalendarPanel(Section section) {
         sections.add(section);
@@ -75,12 +112,13 @@ public class CalendarPanel extends JPanel implements ActionListener {
     }
     public CalendarPanel(Schedule schedule) {
         sections = schedule.calendar;
-        removeAddSectionButton.setText("Save Data");
+        removeAddSectionButton.setText("Remove Section");
 
         createCalendar();
         addSection = false;
     }
     public void draw(Graphics g) {
+        
         g.setColor(Color.black);
         for (int i = borderX; i <= App.xDimension - borderX; i += unitSizeX) {
             g.drawLine(i, borderY - shiftUp, i, App.yDimension - borderY - shiftUp);
@@ -89,7 +127,11 @@ public class CalendarPanel extends JPanel implements ActionListener {
             g.drawLine(borderX, i, App.xDimension - borderX, i);
         }
         Color[] color = {Color.blue, Color.red, Color.green, Color.orange, Color.yellow, Color.gray, Color.pink, Color.cyan, Color.magenta};
-
+        //System.out.println(sections.size());
+        for (int i = 0; i < timesArr.size(); i++) {
+            this.remove(timesArr.get(i));
+        }
+        timesArr = new ArrayList<>();
         for (int sectionNum = 0; sectionNum < sections.size(); sectionNum++) {
             g.setColor(color[colorIndex]);
             colorIndex++;
@@ -108,12 +150,14 @@ public class CalendarPanel extends JPanel implements ActionListener {
                 int yCoord = (int) (borderY + unitSizeY * (MeetingTime.getPointTime(meetingTimes[i].getStartTime()) - 8));
                 int yHeight = (int) (unitSizeY * (MeetingTime.getPointTime(meetingTimes[i].getEndTime()) - MeetingTime.getPointTime(meetingTimes[i].getStartTime())));
                 g.fillRect(xCoord, yCoord - shiftUp, unitSizeX - 1, yHeight);
-
+                rectArr.add(new ArrayList<Rectangle>());
+                rectArr.get(sectionNum).add(new Rectangle(xCoord, yCoord - shiftUp, unitSizeX - 1, yHeight));
                 JLabel times = new JLabel();
                 times.setText(MeetingTime.convertTimeToString(meetingTimes[i].getStartTime()) + " -> " + MeetingTime.convertTimeToString(meetingTimes[i].getEndTime()));
-                times.setForeground(Color.white);
+                times.setForeground(Color.black);
                 times.setBounds(xCoord + 8, (int) (yCoord - 15 + yHeight / 2) - shiftUp + 10, 150, 15);
                 times.setFont(new Font("Arial", Font.PLAIN, 15));
+                timesArr.add(times);
                 this.add(times);
             }
         }
@@ -167,19 +211,38 @@ public class CalendarPanel extends JPanel implements ActionListener {
                 this.add(statusLabel);
             }
             else {
-                boolean saveSuccessful = PopulateValues.subjectsSectionsToFile(App.schedule.calendar, App.wishlist);
-                if (saveSuccessful == true) {
-                    statusLabel.setText("Saved!");
-                    statusLabel.setBounds(App.xDimension - 240, App.yDimension - 75, 250, 15);
+                //System.out.println(sectionClicked.index);
+                int result = App.schedule.removeSection(sectionClicked);
+                if (result == 1) {
+                    statusLabel.setText("Section successfully removed!");
+                    statusLabel.setBounds(App.xDimension - 370, App.yDimension - 75, 250, 15);
+                    sectionClicked = null;
+                } else if (result == 0) {
+                    statusLabel.setText("Please select a section to remove.");
+                    statusLabel.setBounds(App.xDimension - 520, App.yDimension - 75, 350, 15);
                 }
-                else {
-                    statusLabel.setText("Save failed.");
-                    statusLabel.setBounds(App.xDimension - 260, App.yDimension - 75, 250, 15);
+                else if (result == -1) {
+                    statusLabel.setText("Removal failed");
+                    statusLabel.setBounds(App.xDimension - 370, App.yDimension - 75, 250, 15);
                 }
                 statusLabel.setForeground(Color.black);
                 statusLabel.setFont(new Font("Arial", Font.PLAIN, 15));
                 this.add(statusLabel);
-            }            
+            }
+        }
+        if (e.getSource() == saveDataButton) {
+            boolean saveSuccessful = PopulateValues.subjectsSectionsToFile(App.schedule.calendar, App.wishlist);
+            if (saveSuccessful == true) {
+                statusLabel.setText("Saved!");
+                statusLabel.setBounds(App.xDimension / 2, App.yDimension - 95, 250, 15);
+            }
+            else {
+                statusLabel.setText("Save failed.");
+                statusLabel.setBounds(App.xDimension / 2, App.yDimension - 95, 250, 15);
+            }
+            statusLabel.setForeground(Color.black);
+            statusLabel.setFont(new Font("Arial", Font.PLAIN, 15));
+            this.add(statusLabel);
         }
     }
 }

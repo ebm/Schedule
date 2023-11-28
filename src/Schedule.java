@@ -32,4 +32,9 @@ public class Schedule {
         totalCredits += PopulateValues.subjects[section.subjectIndex].getCredits();
         return 1;
     }
+    public int removeSection(Section section) {
+        if (section == null) return 0;
+        if (calendar.remove(section) == false) return -1;
+        return 1;
+    }
 }
