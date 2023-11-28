@@ -83,6 +83,7 @@ public class CalendarPanel extends JPanel implements ActionListener {
             @Override
             public void mouseClicked(MouseEvent e) {
                 //System.out.println(rectArr.size());
+                //System.out.println(rectArr.size() + "<=>" + sections.size());
                 for (int i = 0; i < rectArr.size(); i++) {
                     for (int j = 0; j < rectArr.get(i).size(); j++) {
                         if (rectArr.get(i).get(j).contains(e.getPoint())) {
@@ -132,6 +133,10 @@ public class CalendarPanel extends JPanel implements ActionListener {
             this.remove(timesArr.get(i));
         }
         timesArr = new ArrayList<>();
+        rectArr = new ArrayList<>();
+        for (int i = 0; i < sections.size(); i++) {
+            rectArr.add(new ArrayList<Rectangle>());
+        }
         for (int sectionNum = 0; sectionNum < sections.size(); sectionNum++) {
             g.setColor(color[colorIndex]);
             colorIndex++;
@@ -150,7 +155,6 @@ public class CalendarPanel extends JPanel implements ActionListener {
                 int yCoord = (int) (borderY + unitSizeY * (MeetingTime.getPointTime(meetingTimes[i].getStartTime()) - 8));
                 int yHeight = (int) (unitSizeY * (MeetingTime.getPointTime(meetingTimes[i].getEndTime()) - MeetingTime.getPointTime(meetingTimes[i].getStartTime())));
                 g.fillRect(xCoord, yCoord - shiftUp, unitSizeX - 1, yHeight);
-                rectArr.add(new ArrayList<Rectangle>());
                 rectArr.get(sectionNum).add(new Rectangle(xCoord, yCoord - shiftUp, unitSizeX - 1, yHeight));
                 JLabel times = new JLabel();
                 times.setText(MeetingTime.convertTimeToString(meetingTimes[i].getStartTime()) + " -> " + MeetingTime.convertTimeToString(meetingTimes[i].getEndTime()));
