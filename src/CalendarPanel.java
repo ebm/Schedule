@@ -171,8 +171,8 @@ public class CalendarPanel extends JPanel implements ActionListener {
                 int xCoord = borderX + 1 + unitSizeX * indexX;
                 int yCoord = (int) (borderY + unitSizeY * (MeetingTime.getPointTime(meetingTimes[i].getStartTime()) - 8));
                 int yHeight = (int) (unitSizeY * (MeetingTime.getPointTime(meetingTimes[i].getEndTime()) - MeetingTime.getPointTime(meetingTimes[i].getStartTime())));
-                g.fillRect(xCoord, yCoord - shiftUp, unitSizeX - 1, yHeight);
-                rectArr.get(sectionNum).add(new Rectangle(xCoord, yCoord - shiftUp, unitSizeX - 1, yHeight));
+                g.fillRect(xCoord, yCoord - shiftUp, unitSizeX - 1, yHeight + 1);
+                rectArr.get(sectionNum).add(new Rectangle(xCoord, yCoord - shiftUp, unitSizeX - 1, yHeight + 1));
                 JLabel times = new JLabel();
                 times.setText(MeetingTime.convertTimeToString(meetingTimes[i].getStartTime()) + " -> " + MeetingTime.convertTimeToString(meetingTimes[i].getEndTime()));
                 times.setForeground(Color.black);
