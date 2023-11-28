@@ -31,6 +31,8 @@ public class CalendarPanel extends JPanel implements ActionListener {
     Section sectionClicked = null;
     ArrayList<JLabel> timesArr = new ArrayList<>();
 
+    Color[] color = {Color.blue, Color.red, Color.green, Color.orange, Color.yellow, Color.pink, Color.cyan, Color.magenta, Color.gray};
+
     public void createCalendar() {
         this.setLayout(null);
 
@@ -50,6 +52,10 @@ public class CalendarPanel extends JPanel implements ActionListener {
         backButton.addActionListener(this);
         backButton.setText("Back");
         backButton.setFocusable(false);
+        
+        for (int i = 0; i < sections.size(); i++) {
+            sections.get(i).color = color[i];
+        }
 
         String[] daysOfWeek = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
         for (int i = 0; i < daysOfWeek.length; i++) {
@@ -88,7 +94,14 @@ public class CalendarPanel extends JPanel implements ActionListener {
                     for (int j = 0; j < rectArr.get(i).size(); j++) {
                         if (rectArr.get(i).get(j).contains(e.getPoint())) {
                             sectionClicked = sections.get(i);
+                            App.frame.revalidate();
+                            App.frame.repaint();
                             //System.out.println(sectionClicked.index);
+                            return;
+                        } else {
+                            sectionClicked = null;
+                            App.frame.revalidate();
+                            App.frame.repaint();
                         }
                     }
                 }
@@ -127,7 +140,6 @@ public class CalendarPanel extends JPanel implements ActionListener {
         for (int i = borderY - shiftUp; i <= App.yDimension - borderY - shiftUp; i += unitSizeY) {
             g.drawLine(borderX, i, App.xDimension - borderX, i);
         }
-        Color[] color = {Color.blue, Color.red, Color.green, Color.orange, Color.yellow, Color.gray, Color.pink, Color.cyan, Color.magenta};
         //System.out.println(sections.size());
         for (int i = 0; i < timesArr.size(); i++) {
             this.remove(timesArr.get(i));
@@ -138,7 +150,7 @@ public class CalendarPanel extends JPanel implements ActionListener {
             rectArr.add(new ArrayList<Rectangle>());
         }
         for (int sectionNum = 0; sectionNum < sections.size(); sectionNum++) {
-            g.setColor(color[colorIndex]);
+            g.setColor(sections.get(sectionNum).color);
             colorIndex++;
             meetingTimes = sections.get(sectionNum).meetingTimes;
             for (int i = 0; i < meetingTimes.length; i++) {
@@ -149,6 +161,11 @@ public class CalendarPanel extends JPanel implements ActionListener {
                         indexX = j;
                         break;
                     }
+                }
+                if (sectionClicked != null && sectionClicked.meetingTimes.equals(meetingTimes)) {
+                    g.setColor(Color.gray);
+                    //g.setColor(color[colorIndex]);
+                    //System.out.println(sectionClicked.index);
                 }
                 //System.out.println(meetingTimes[i].getStartTime() + meetingTimes[i].pmCode + "->" + meetingTimes[i].getEndTime() + meetingTimes[i].pmCode);
                 int xCoord = borderX + 1 + unitSizeX * indexX;
