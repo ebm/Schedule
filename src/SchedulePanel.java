@@ -120,6 +120,10 @@ public class SchedulePanel extends JPanel implements ActionListener{
         App.frame.repaint();
     }
     public void search(String input) {
+        if (PopulateValues.subjects == null) {
+            RefreshResults.refresh(App.url, App.filename);
+            PopulateValues.populate(App.filename, App.scheduleFile, App.wishlistFile);
+        }
         ArrayList<String> searchedResults = CheckSchedule.search(input, PopulateValues.subjects);
         
         JList<String> list = new JList<>();
