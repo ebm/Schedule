@@ -11,6 +11,7 @@ public class Frame extends JFrame{
         this.pack();
         this.setVisible(true);
         this.setLocationRelativeTo(null);
+        this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
     }
     public void setSchedulePanel(SchedulePanel schedulePanel) {
         this.schedulePanel = schedulePanel;
