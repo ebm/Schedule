@@ -93,18 +93,20 @@ public class CalendarPanel extends JPanel implements ActionListener {
             public void mouseClicked(MouseEvent e) {
                 //System.out.println(rectArr.size());
                 //System.out.println(rectArr.size() + "<=>" + sections.size());
-                for (int i = 0; i < rectArr.size(); i++) {
-                    for (int j = 0; j < rectArr.get(i).size(); j++) {
-                        if (rectArr.get(i).get(j).contains(e.getPoint())) {
-                            sectionClicked = sections.get(i);
-                            App.frame.revalidate();
-                            App.frame.repaint();
-                            //System.out.println(sectionClicked.index);
-                            return;
-                        } else {
-                            sectionClicked = null;
-                            App.frame.revalidate();
-                            App.frame.repaint();
+                    if (addSection == false) {
+                        for (int i = 0; i < rectArr.size(); i++) {
+                        for (int j = 0; j < rectArr.get(i).size(); j++) {
+                            if (rectArr.get(i).get(j).contains(e.getPoint())) {
+                                sectionClicked = sections.get(i);
+                                App.frame.revalidate();
+                                App.frame.repaint();
+                                //System.out.println(sectionClicked.index);
+                                return;
+                            } else {
+                                sectionClicked = null;
+                                App.frame.revalidate();
+                                App.frame.repaint();
+                            }
                         }
                     }
                 }
