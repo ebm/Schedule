@@ -56,8 +56,8 @@ public class CalendarPanel extends JPanel implements ActionListener {
         backButton.setFocusable(false);
         
         for (int i = 0; i < sections.size(); i++) {
-            sections.get(i).color = color[i];
-            sections.get(i).darkColor = darkColor[i];
+            sections.get(i).RGB = color[i].getRGB();
+            sections.get(i).darkRGB = darkColor[i].getRGB();
         }
 
         String[] daysOfWeek = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
@@ -155,7 +155,7 @@ public class CalendarPanel extends JPanel implements ActionListener {
             rectArr.add(new ArrayList<Rectangle>());
         }
         for (int sectionNum = 0; sectionNum < sections.size(); sectionNum++) {
-            g.setColor(sections.get(sectionNum).color);
+            g.setColor(new Color(sections.get(sectionNum).RGB));
             colorIndex++;
             meetingTimes = sections.get(sectionNum).meetingTimes;
             for (int i = 0; i < meetingTimes.length; i++) {
@@ -168,7 +168,7 @@ public class CalendarPanel extends JPanel implements ActionListener {
                     }
                 }
                 if (sectionClicked != null && sectionClicked.meetingTimes.equals(meetingTimes)) {
-                    g.setColor(sections.get(sectionNum).darkColor);
+                    g.setColor(new Color(sections.get(sectionNum).darkRGB));
                     //g.setColor(color[colorIndex]);
                     //System.out.println(sectionClicked.index);
                 }

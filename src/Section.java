@@ -5,8 +5,8 @@ public class Section {
     public MeetingTime[] meetingTimes;
     public boolean openStatus;
     public int subjectIndex;
-    public Color color;
-    public Color darkColor;
+    public int RGB;
+    public int darkRGB;
 
     // Initializer
     public Section(String index, MeetingTime[] meetingTimes, boolean openStatus) {
