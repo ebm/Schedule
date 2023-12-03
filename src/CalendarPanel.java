@@ -90,7 +90,13 @@ public class CalendarPanel extends JPanel implements ActionListener {
 
         class MouseClick implements MouseListener {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mouseClicked(MouseEvent e) {}
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+            @Override
+            public void mouseExited(MouseEvent e) {}
+            @Override
+            public void mousePressed(MouseEvent e) {
                 //System.out.println(rectArr.size());
                 //System.out.println(rectArr.size() + "<=>" + sections.size());
                     if (addSection == false) {
@@ -111,12 +117,6 @@ public class CalendarPanel extends JPanel implements ActionListener {
                     }
                 }
             }
-            @Override
-            public void mouseEntered(MouseEvent e) {}
-            @Override
-            public void mouseExited(MouseEvent e) {}
-            @Override
-            public void mousePressed(MouseEvent e) {}
             @Override
             public void mouseReleased(MouseEvent e) {}
         }
