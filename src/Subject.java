@@ -6,7 +6,12 @@ public class Subject {
     public int numOpenSections;
     public boolean openSectionCalculated = false;
 
-
+    public Subject(Subject subject) {
+        this.title = subject.title;
+        this.courseString = subject.courseString;
+        this.sections = subject.sections;
+        this.credits = subject.credits;
+    }
     public Subject(String title, String courseString, Section[] sections, String credits) {
         this.title = title;
         this.courseString = courseString;

@@ -1,9 +1,12 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -18,10 +21,11 @@ public class WishlistPanel extends JPanel implements ActionListener{
     JButton removeSubjectFromWishlistButton = new JButton();
     JScrollPane scrollPaneClass;
 
+    JButton viewWishlistScheduleButton = new JButton();
+    JCheckBox[] getFreeDays = new JCheckBox[7];
+
     JLabel totalCreditsLabel = new JLabel();
     String subjectSelected;
-
-    JButton createScheduleButton = new JButton();
 
     double totalCredits = 0.0;
     
@@ -40,16 +44,36 @@ public class WishlistPanel extends JPanel implements ActionListener{
         backButton.setFocusable(false);
 
         removeSubjectFromWishlistButton.setSize(new Dimension(200, 75));
-        removeSubjectFromWishlistButton.setLocation(600,525);
+        removeSubjectFromWishlistButton.setLocation(600, 100);
         removeSubjectFromWishlistButton.addActionListener(this);
         removeSubjectFromWishlistButton.setText("Remove Subject");
         removeSubjectFromWishlistButton.setFocusable(false);
+
+        viewWishlistScheduleButton.setSize(new Dimension(200, 75));
+        viewWishlistScheduleButton.setLocation(600, 425);
+        viewWishlistScheduleButton.addActionListener(this);
+        viewWishlistScheduleButton.setText("View Schedule");
+        viewWishlistScheduleButton.setFocusable(false);
+
+        String[] daysOfWeek = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+        for (int i = 0; i < getFreeDays.length; i++) {
+            int j = 0;
+            if (i >= 3) j = 1;
+            getFreeDays[i] = new JCheckBox();
+            getFreeDays[i].setText(daysOfWeek[i]);
+            getFreeDays[i].setFocusable(false);
+            getFreeDays[i].setFont(new Font("Arial", Font.PLAIN, 15));
+            getFreeDays[i].setBounds(600 + i * 125 - 3 * j * 125, 200 + 30 * j, 125, 15);
+            getFreeDays[i].setSelected(true);
+            this.add(getFreeDays[i]);
+        }
 
         this.setPreferredSize(new Dimension(1920, 1080));
         //this.setBackground(Color.black);
         this.setFocusable(true);
         this.add(backButton);
         this.add(removeSubjectFromWishlistButton);
+        this.add(viewWishlistScheduleButton);
         showData();
     }
     public void showData() {
@@ -79,12 +103,28 @@ public class WishlistPanel extends JPanel implements ActionListener{
             public void valueChanged(ListSelectionEvent e) {
                 if (e.getValueIsAdjusting() == false) {
                     subjectSelected = list.getSelectedValue();
-                    System.out.println(subjectSelected);
+                    //System.out.println(subjectSelected);
                 }
             }
         });
         App.frame.revalidate();
         App.frame.repaint();
+    }
+    public ArrayList<Schedule> everyClass(Subject[] wishlistSubjects, int index, ArrayList<Schedule> currSchedule, ArrayList<Section> currList) {
+        for (int i = 0; i < wishlistSubjects[index].sections.length; i++) {
+            currList.add(wishlistSubjects[index].sections[i]);
+            if (index + 1 != wishlistSubjects.length) currSchedule = everyClass(wishlistSubjects, index + 1, currSchedule, currList);
+            if (currList.size() == wishlistSubjects.length) {
+                currSchedule.add(new Schedule());
+                for (int j = 0; j < currList.size(); j++) {
+                    if (currSchedule.get(currSchedule.size() - 1).addSection(currList.get(j)) != 1) {
+                        currSchedule.remove(currSchedule.size() - 1);
+                    }
+                }
+                currList = new ArrayList<>();
+            }
+        }
+        return currSchedule;
     }
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -104,8 +144,36 @@ public class WishlistPanel extends JPanel implements ActionListener{
             }
             showData();
         }
-        if (e.getSource() == createScheduleButton) {
+        if (e.getSource() == viewWishlistScheduleButton) {
+            ArrayList<String> freeDaysArrayList = new ArrayList<>();
+            String[] daysOfWeek = {"M", "T", "W", "H", "F", "S", "U"};
+            for (int i = 0; i < 7; i++) {
+                if (getFreeDays[i].isSelected() == false) freeDaysArrayList.add(daysOfWeek[i]);
+            }
+            String[] freeDays = new String[freeDaysArrayList.size()];
+            for (int i = 0; i < freeDays.length; i++) {
+                //System.out.println(freeDaysArrayList.get(i));
+                freeDays[i] = freeDaysArrayList.get(i);
+            }
+            Subject[] wishlistSubjects = new Subject[App.wishlist.size()];
+            for (int i = 0; i < wishlistSubjects.length; i++) {
+                wishlistSubjects[i] = new Subject(App.wishlist.get(i));
+            }
+            /*for (int i = 0; i < wishlistSubjects.length; i++) {
+                for (int j = 0; j < wishlistSubjects[i].sections.length; j++) {
+                    System.out.println(wishlistSubjects[i].sections[j].index);
+                }
+                System.out.println("================");
+            }*/
+            for (int i = 0; i < wishlistSubjects.length; i++) {
+                wishlistSubjects[i].sections = CheckSchedule.getSectionsWithinDays(freeDays, wishlistSubjects[i].sections);
+            }
+            Random rand = new Random();
+            ArrayList<Schedule> listOfSchedules = everyClass(wishlistSubjects, 0, new ArrayList<>(), new ArrayList<>());
+            System.out.println(listOfSchedules.size());
+            //System.out.println(App.wishlist.get(0).sections.length);
             App.frame.remove(this);
+            App.frame.add(new CalendarPanel(listOfSchedules.get(0)));
             App.frame.revalidate();
             App.frame.repaint();
         }
