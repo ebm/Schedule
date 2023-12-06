@@ -18,6 +18,7 @@ public class MeetingTime {
             minutes = "00";
         }
         else {
+            if (time % 100 < 10) minutes += "0";
             minutes += time % 100;
         }
         if (time < 1200) {
