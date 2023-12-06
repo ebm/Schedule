@@ -21,23 +21,28 @@ class PopulateValues {
     // Creates subjects
     private static void createSubjects(String file, String scheduleString, String wishlistString) {
         Gson gson = new Gson();
-        if (file == null) return;
-        subjects = gson.fromJson(file, Subject[].class);
-        for (int i = 0; i < subjects.length; i++) {
-            for (int j = 0; j < subjects[i].sections.length; j++) {
-                subjects[i].sections[j].subjectIndex = i;
+        if (file != null) {
+            subjects = gson.fromJson(file, Subject[].class);
+            for (int i = 0; i < subjects.length; i++) {
+                for (int j = 0; j < subjects[i].sections.length; j++) {
+                    subjects[i].sections[j].subjectIndex = i;
+                }
             }
         }
-        if (scheduleString == null) return;
-        Section[] schedule = gson.fromJson(scheduleString, Section[].class);
-        if (wishlistString == null) return;
-        Subject[] wishlist = gson.fromJson(wishlistString, Subject[].class);
-        for (int i = 0; i < schedule.length; i++) {
-            App.schedule.calendar.add(schedule[i]);
+        
+        if (scheduleString != null) {
+            Section[] schedule = gson.fromJson(scheduleString, Section[].class);
+            for (int i = 0; i < schedule.length; i++) {
+                App.schedule.calendar.add(schedule[i]);
+            }
         }
-        for (int i = 0; i < wishlist.length; i++) {
-            App.wishlist.add(wishlist[i]);
+        if (wishlistString != null) {
+            Subject[] wishlist = gson.fromJson(wishlistString, Subject[].class);    
+            for (int i = 0; i < wishlist.length; i++) {
+                App.wishlist.add(wishlist[i]);
+            }
         }
+        
     }
 
     public static boolean subjectsSectionsToFile(ArrayList<Section> schedule, ArrayList<Subject> wishlist) {
