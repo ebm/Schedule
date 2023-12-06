@@ -1,5 +1,3 @@
-import java.awt.Color;
-
 public class Section {
     public String index;
     public MeetingTime[] meetingTimes;
