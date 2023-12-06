@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class CheckSchedule {
-    private static int timeDifference = 45;
+    private static int timeDifference = 40;
 
     // Basic search function
     public static ArrayList<String> search(String input, Subject[] subjects) {
@@ -29,11 +29,12 @@ public class CheckSchedule {
     public static boolean scheduleChecker(Section a, Section b) {
         MeetingTime[] meetingTimeA = a.meetingTimes;
         MeetingTime[] meetingTimeB = b.meetingTimes;
+        
         for (int i = 0; i < meetingTimeA.length; i++) {
             for (int j = 0; j < meetingTimeB.length; j++) {
                 if (meetingTimeA[i].meetingDay.equals(meetingTimeB[j].meetingDay)) {
                     if (meetingTimeA[i].getEndTime() + timeDifference > meetingTimeB[j].getStartTime() && meetingTimeB[j].getEndTime() + timeDifference > meetingTimeA[i].getStartTime()) {
-                        if (meetingTimeA[i].getStartTime() != -1) return false;
+                        if (meetingTimeA[i].getStartTime() != -1 && meetingTimeB[j].getStartTime() != -1) return false;
                         //System.out.println("=====================");
                         //System.out.println(meetingTimeA[i].getStartTime() + meetingTimeA[i].pmCode + "->" + meetingTimeA[i].getEndTime() + meetingTimeA[i].pmCode);
                         //System.out.println(meetingTimeB[i].getStartTime() + meetingTimeB[i].pmCode + "->" + meetingTimeB[i].getEndTime() + meetingTimeB[i].pmCode);

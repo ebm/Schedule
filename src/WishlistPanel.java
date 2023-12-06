@@ -118,7 +118,8 @@ public class WishlistPanel extends JPanel implements ActionListener{
                 currSchedule.add(new Schedule());
                 for (int j = 0; j < currList.size(); j++) {
                     if (currSchedule.get(currSchedule.size() - 1).addSection(currList.get(j)) != 1) {
-                        currSchedule.remove(currSchedule.size() - 1);
+                        if (currSchedule.size() != 0) currSchedule.remove(currSchedule.size() - 1);
+                        break;
                     }
                 }
                 currList = new ArrayList<>();
@@ -173,7 +174,7 @@ public class WishlistPanel extends JPanel implements ActionListener{
             System.out.println(listOfSchedules.size());
             //System.out.println(App.wishlist.get(0).sections.length);
             App.frame.remove(this);
-            App.frame.add(new CalendarPanel(listOfSchedules.get(0)));
+            App.frame.add(new CalendarPanel(listOfSchedules, 0));
             App.frame.revalidate();
             App.frame.repaint();
         }

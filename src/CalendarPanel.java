@@ -31,6 +31,11 @@ public class CalendarPanel extends JPanel implements ActionListener {
     Section sectionClicked = null;
     ArrayList<JLabel> timesArr = new ArrayList<>();
 
+    JButton nextScheduleButton = new JButton();
+    JButton previousScheduleButton = new JButton();
+    ArrayList<Schedule> scheduleOfClasses;
+    int scheduleIndex = 0;
+
     // ************************* blue ******************** red ********************* lime ******************* yellow ****************** pink ******************* cyan ****************** orange *************** green ************** gray ***********
     Color[] color = {new Color(100, 100, 255), new Color(255, 100, 100), new Color(100, 255, 100), new Color(255, 223, 0), new Color (251, 72, 196), new Color(0, 188, 227), new Color(225, 127, 0), new Color(0, 120, 60), new Color(100, 100, 100)};
     Color[] darkColor = {new Color(75, 75, 200), new Color(200, 75, 75), new Color(75, 200, 75), new Color(200, 185, 0), new Color (200, 50, 175), new Color(0, 158, 197), new Color(185, 100, 0), new Color(0, 100, 40), new Color(70, 70, 70)};
@@ -132,6 +137,34 @@ public class CalendarPanel extends JPanel implements ActionListener {
     public CalendarPanel(Schedule schedule) {
         sections = schedule.calendar;
         removeAddSectionButton.setText("Remove Section");
+
+        createCalendar();
+        addSection = false;
+    }
+    public CalendarPanel(ArrayList<Schedule> schedule, int scheduleIndex) {
+        this.scheduleOfClasses = schedule;
+        this.scheduleIndex = scheduleIndex;
+        if (schedule.size() == 0) {
+            sections = new ArrayList<>();
+        } else {
+            sections = schedule.get(scheduleIndex).calendar;
+        }
+        removeAddSectionButton.setText("Remove Section");
+
+        nextScheduleButton.setSize(new Dimension(75, 25));
+        nextScheduleButton.setLocation(80, 0);
+        nextScheduleButton.addActionListener(this);
+        nextScheduleButton.setText(">");
+        nextScheduleButton.setFocusable(false);
+
+        previousScheduleButton.setSize(new Dimension(75, 25));
+        previousScheduleButton.setLocation(0, 0);
+        previousScheduleButton.addActionListener(this);
+        previousScheduleButton.setText("<");
+        previousScheduleButton.setFocusable(false);
+
+        this.add(nextScheduleButton);
+        this.add(previousScheduleButton);
 
         createCalendar();
         addSection = false;
@@ -271,6 +304,30 @@ public class CalendarPanel extends JPanel implements ActionListener {
             statusLabel.setForeground(Color.black);
             statusLabel.setFont(new Font("Arial", Font.PLAIN, 15));
             this.add(statusLabel);
+            App.frame.revalidate();
+            App.frame.repaint();
+        }
+        if (e.getSource() == nextScheduleButton && scheduleIndex + 1 < scheduleOfClasses.size()) {
+            scheduleIndex++;
+            sections = scheduleOfClasses.get(scheduleIndex).calendar;
+            for (int i = 0; i < sections.size(); i++) {
+                System.out.println(sections.get(i).index);
+            }
+            System.out.println("============");
+            App.frame.remove(this);
+            App.frame.add(new CalendarPanel(scheduleOfClasses, scheduleIndex));
+            App.frame.revalidate();
+            App.frame.repaint();
+        }
+        if (e.getSource() == previousScheduleButton && scheduleIndex - 1 >= 0) {
+            scheduleIndex--;
+            sections = scheduleOfClasses.get(scheduleIndex).calendar;
+            for (int i = 0; i < sections.size(); i++) {
+                System.out.println(sections.get(i).index);
+            }
+            System.out.println("============");
+            App.frame.remove(this);
+            App.frame.add(new CalendarPanel(scheduleOfClasses, scheduleIndex));
             App.frame.revalidate();
             App.frame.repaint();
         }
