@@ -12,4 +12,9 @@ public class Section {
         this.meetingTimes = meetingTimes;
         this.openStatus = openStatus;
     }
+    public Section (Section section) {
+        this.index = section.index;
+        this.meetingTimes = section.meetingTimes;
+        this.openStatus = section.openStatus;
+    }
 }

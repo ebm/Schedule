@@ -9,7 +9,10 @@ public class Schedule {
         calendar = new ArrayList<>();
     }
     public Schedule(ArrayList<Section> sections) {
-        calendar = sections;
+        calendar = new ArrayList<>();
+        for (int i = 0; i < sections.size(); i++) {
+            calendar.add(new Section(sections.get(i)));
+        }
         for (int i = 0; i < calendar.size(); i++) {
             totalCredits += PopulateValues.subjects[calendar.get(i).subjectIndex].getCredits();
         }
@@ -31,6 +34,11 @@ public class Schedule {
         calendar.add(section);
         totalCredits += PopulateValues.subjects[section.subjectIndex].getCredits();
         return 1;
+    }
+    public static Schedule returnAddedSchedule(Schedule schedule, Section section) {
+        Schedule s = new Schedule(schedule.calendar);
+        s.addSection(section);
+        return s;
     }
     public int removeSection(Section section) {
         if (section == null) return 0;
