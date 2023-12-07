@@ -110,20 +110,24 @@ public class WishlistPanel extends JPanel implements ActionListener{
         App.frame.revalidate();
         App.frame.repaint();
     }
-    public ArrayList<Schedule> everyClass(Subject[] wishlistSubjects, int index, ArrayList<Schedule> currSchedule, ArrayList<Section> currList) {
+    ArrayList<Schedule> curr = new ArrayList<>();
+    public ArrayList<Schedule> everyClass(Subject[] wishlistSubjects, int index, ArrayList<Schedule> currSchedule, Schedule currList) {
         for (int i = 0; i < wishlistSubjects[index].sections.length; i++) {
-            currList.add(wishlistSubjects[index].sections[i]);
-            if (index + 1 != wishlistSubjects.length) currSchedule = everyClass(wishlistSubjects, index + 1, currSchedule, currList);
-            if (currList.size() == wishlistSubjects.length) {
-                currSchedule.add(new Schedule());
-                for (int j = 0; j < currList.size(); j++) {
-                    if (currSchedule.get(currSchedule.size() - 1).addSection(currList.get(j)) != 1) {
-                        if (currSchedule.size() != 0) currSchedule.remove(currSchedule.size() - 1);
-                        break;
-                    }
-                }
-                currList = new ArrayList<>();
+            /*System.out.println("Section to add: " + PopulateValues.subjects[wishlistSubjects[index].sections[i].subjectIndex].title + "," + wishlistSubjects[index].sections[i].index);
+            for (int j = 0; j < currList.calendar.size(); j++) {
+                Section s = currList.calendar.get(j);
+                System.out.print(PopulateValues.subjects[s.subjectIndex].title + ": " + s.index + ",");
             }
+            System.out.println();*/
+            if (currList.addSection(wishlistSubjects[index].sections[i]) == 1) {
+                if (index + 1 != wishlistSubjects.length) currSchedule = everyClass(wishlistSubjects, index + 1, currSchedule, currList);
+                if (currList.calendar.size() == wishlistSubjects.length) {
+                    curr.add(currList);
+                }
+            }
+        }
+        for (int i = 0; i < curr.size(); i++) {
+            System.out.println(curr.get(i).calendar.size());
         }
         return currSchedule;
     }
@@ -169,8 +173,10 @@ public class WishlistPanel extends JPanel implements ActionListener{
             for (int i = 0; i < wishlistSubjects.length; i++) {
                 wishlistSubjects[i].sections = CheckSchedule.getSectionsWithinDays(freeDays, wishlistSubjects[i].sections);
             }
-            Random rand = new Random();
-            ArrayList<Schedule> listOfSchedules = everyClass(wishlistSubjects, 0, new ArrayList<>(), new ArrayList<>());
+            ArrayList<Schedule> listOfSchedules = everyClass(wishlistSubjects, 0, new ArrayList<>(), new Schedule());
+            for(int i = 0; i < listOfSchedules.size(); i++) {
+                System.out.println(listOfSchedules.get(i).calendar.size());
+            }
             System.out.println(listOfSchedules.size());
             //System.out.println(App.wishlist.get(0).sections.length);
             App.frame.remove(this);
