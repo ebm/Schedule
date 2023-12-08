@@ -73,6 +73,8 @@ public class WishlistPanel extends JPanel implements ActionListener{
             getFreeDays[i].setSelected(true);
             this.add(getFreeDays[i]);
         }
+        getFreeDays[5].setSelected(false);
+        getFreeDays[6].setSelected(false);
 
         class SlideListener implements ChangeListener {
             public void stateChanged(ChangeEvent e) {
