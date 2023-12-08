@@ -22,7 +22,7 @@ public class MeetingTime {
             minutes += time % 100;
         }
         if (time < 1200) {
-            return time / 100 + ":" + minutes + "am";
+            return time / 100 + ":" + minutes + " am";
         }
         else if (time >= 1200 && time <= 1259) {
             return time / 100 + ":" + minutes + "pm";

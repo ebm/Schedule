@@ -2,6 +2,7 @@ import javax.swing.*;
 
 public class Frame extends JFrame{
     public SchedulePanel schedulePanel;
+    public WishlistPanel wishlistPanel;
     public Frame() {
         this.add(new DefaultPanel());
 
@@ -15,5 +16,8 @@ public class Frame extends JFrame{
     }
     public void setSchedulePanel(SchedulePanel schedulePanel) {
         this.schedulePanel = schedulePanel;
+    }
+    public void setWishlistPanel(WishlistPanel wishlistPanel) {
+        this.wishlistPanel = wishlistPanel;
     }
 }

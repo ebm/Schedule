@@ -163,8 +163,15 @@ public class CalendarPanel extends JPanel implements ActionListener {
         previousScheduleButton.setText("<");
         previousScheduleButton.setFocusable(false);
 
+        JLabel currentScheduleNumber = new JLabel();
+        currentScheduleNumber.setText(scheduleIndex + "/" + scheduleOfClasses.size());
+        currentScheduleNumber.setForeground(Color.black);
+        currentScheduleNumber.setBounds(160, 0, 100, 15);
+        currentScheduleNumber.setFont(new Font("Arial", Font.PLAIN, 15));
+
         this.add(nextScheduleButton);
         this.add(previousScheduleButton);
+        this.add(currentScheduleNumber);
 
         createCalendar();
         addSection = false;
@@ -230,7 +237,13 @@ public class CalendarPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == backButton) {
-            if (addSection == true) {
+            if (scheduleOfClasses != null) {
+                App.frame.remove(this);
+                App.frame.wishlistPanel.setVisible(true);
+                App.frame.revalidate();
+                App.frame.repaint();
+            }
+            else if (addSection == true) {
                 App.frame.remove(this);
                 App.frame.schedulePanel.setVisible(true);
                 App.frame.revalidate();
@@ -310,10 +323,6 @@ public class CalendarPanel extends JPanel implements ActionListener {
         if (e.getSource() == nextScheduleButton && scheduleIndex + 1 < scheduleOfClasses.size()) {
             scheduleIndex++;
             sections = scheduleOfClasses.get(scheduleIndex).calendar;
-            for (int i = 0; i < sections.size(); i++) {
-                System.out.println(sections.get(i).index);
-            }
-            System.out.println("============");
             App.frame.remove(this);
             App.frame.add(new CalendarPanel(scheduleOfClasses, scheduleIndex));
             App.frame.revalidate();

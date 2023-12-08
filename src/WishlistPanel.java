@@ -2,7 +2,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Random;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -11,6 +10,9 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -23,7 +25,9 @@ public class WishlistPanel extends JPanel implements ActionListener{
 
     JButton viewWishlistScheduleButton = new JButton();
     JCheckBox[] getFreeDays = new JCheckBox[7];
-    ArrayList<Schedule> listOfSchedules = new ArrayList<>();
+    ArrayList<Schedule> listOfSchedules;
+    TimeConstraint listTimeConstraints = new TimeConstraint();
+    int timeConstraints[] = {800, 2300};
 
     JLabel totalCreditsLabel = new JLabel();
     String subjectSelected;
@@ -31,6 +35,7 @@ public class WishlistPanel extends JPanel implements ActionListener{
     double totalCredits = 0.0;
     
     public WishlistPanel() {
+        App.frame.setWishlistPanel(this);
         this.setLayout(null);
 
         for (int i = 0; i < App.wishlist.size(); i++) {
@@ -50,8 +55,8 @@ public class WishlistPanel extends JPanel implements ActionListener{
         removeSubjectFromWishlistButton.setText("Remove Subject");
         removeSubjectFromWishlistButton.setFocusable(false);
 
-        viewWishlistScheduleButton.setSize(new Dimension(200, 75));
-        viewWishlistScheduleButton.setLocation(600, 425);
+        viewWishlistScheduleButton.setSize(new Dimension(150, 75));
+        viewWishlistScheduleButton.setLocation(App.xDimension - 170, App.yDimension - 95);
         viewWishlistScheduleButton.addActionListener(this);
         viewWishlistScheduleButton.setText("View Schedule");
         viewWishlistScheduleButton.setFocusable(false);
@@ -68,6 +73,31 @@ public class WishlistPanel extends JPanel implements ActionListener{
             getFreeDays[i].setSelected(true);
             this.add(getFreeDays[i]);
         }
+
+        class SlideListener implements ChangeListener {
+            public void stateChanged(ChangeEvent e) {
+                JSlider source = (JSlider) e.getSource();
+                for (int i = 0; i < 2; i++) {
+                    if (source == listTimeConstraints.getTimeConstraints[i]) {
+                        int temp = (int) source.getValue();
+                        timeConstraints[i] = ((int) temp / 100) * 100 + (temp % 100) * 60 / 100;
+                        listTimeConstraints.textField[i].setText(MeetingTime.convertTimeToString(timeConstraints[i]));
+                    }
+                }
+
+                /*if (!source.getValueIsAdjusting()) {
+                    if (source)
+                }*/
+            }
+        }
+
+        for (int i = 0; i < 2; i++) {
+            listTimeConstraints.getTimeConstraints[i].addChangeListener(new SlideListener());
+            this.add(listTimeConstraints.getTimeConstraints[i]);
+            this.add(listTimeConstraints.getTimeConstraintsLabel[i]);
+            this.add(listTimeConstraints.textField[i]);
+        }
+        
 
         this.setPreferredSize(new Dimension(1920, 1080));
         //this.setBackground(Color.black);
@@ -146,26 +176,19 @@ public class WishlistPanel extends JPanel implements ActionListener{
             }
             String[] freeDays = new String[freeDaysArrayList.size()];
             for (int i = 0; i < freeDays.length; i++) {
-                //System.out.println(freeDaysArrayList.get(i));
                 freeDays[i] = freeDaysArrayList.get(i);
             }
             Subject[] wishlistSubjects = new Subject[App.wishlist.size()];
             for (int i = 0; i < wishlistSubjects.length; i++) {
                 wishlistSubjects[i] = new Subject(App.wishlist.get(i));
             }
-            /*for (int i = 0; i < wishlistSubjects.length; i++) {
-                for (int j = 0; j < wishlistSubjects[i].sections.length; j++) {
-                    System.out.println(wishlistSubjects[i].sections[j].index);
-                }
-                System.out.println("================");
-            }*/
             for (int i = 0; i < wishlistSubjects.length; i++) {
                 wishlistSubjects[i].sections = CheckSchedule.getSectionsWithinDays(freeDays, wishlistSubjects[i].sections);
+                wishlistSubjects[i].sections = CheckSchedule.getSectionsWithinTimeConstraint(timeConstraints[0], timeConstraints[1], wishlistSubjects[i].sections);
             }
+            listOfSchedules = new ArrayList<>();
             everyClass(wishlistSubjects, 0, new Schedule());
-            System.out.println(listOfSchedules.size() + "," + listOfSchedules.get(0).calendar.size());
-            //System.out.println(App.wishlist.get(0).sections.length);
-            App.frame.remove(this);
+            this.setVisible(false);
             App.frame.add(new CalendarPanel(listOfSchedules, 0));
             App.frame.revalidate();
             App.frame.repaint();
