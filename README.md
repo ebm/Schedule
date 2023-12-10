@@ -1,6 +1,6 @@
-## Getting Started
+## Schedule App
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+A Java app which pulls class data from the Rutgers course website and gives a user a more intuitive graphical interface they can use to add and create classes. It also includes a wishlist tab where the program builds a sample schedule for the user based on a select list of specifications (free days, time intervals, campus locations).
 
 ## Folder Structure
 
