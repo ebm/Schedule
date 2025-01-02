@@ -1,0 +1,14 @@
+{
+    "java.project.sourcePaths": ["src"],
+    "java.project.outputPath": "bin",
+    "java.project.referencedLibraries": {
+        "include": [
+            "lib/**/*.jar",
+            "c:\\Users\\000\\Downloads\\gson-2.10.1.jar",
+            "c:\\Users\\user0\\Downloads\\gson-2.10.1.jar"
+        ],
+        "exclude": [
+            "lib/gson-2.10.jar"
+        ]
+    }
+}
