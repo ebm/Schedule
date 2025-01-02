@@ -89,9 +89,6 @@ public class CheckSchedule {
         return updatedSections;
     }
 
-    // Returns a list of classes that only occur on certain days
-    // M = Monday | T = Tuesday | W = Wednesday | H = Thursday | F = Friday | S = Saturday | U = Sunday
-
     /**
      * M = Monday | T = Tuesday | W = Wednesday | H = Thursday | F = Friday | S = Saturday | U = Sunday
      * Finds classes that are not on the specified free days. Useful for a student who might want a day off.
