@@ -86,10 +86,6 @@ public class WishlistPanel extends JPanel implements ActionListener{
                         listTimeConstraints.textField[i].setText(MeetingTime.convertTimeToString(timeConstraints[i]));
                     }
                 }
-
-                /*if (!source.getValueIsAdjusting()) {
-                    if (source)
-                }*/
             }
         }
 
